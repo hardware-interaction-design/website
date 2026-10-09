@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+@source not '../archive';
+@source not '../tests';
+
+@theme {
+  --color-background: #080c10;
+  --color-panel: #0d1117;
+  --color-raised: #111820;
+  --color-line: #1e2d3d;
+  --color-accent: #f0a500;
+  --color-signal: #00c8a0;
+  --color-copy: #c9d8e8;
+  --color-muted: #91a8bd;
+  --color-control: #71869a;
+  --color-heading: #e8f0f8;
+  --font-mono: 'Courier New', Courier, monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-background text-copy font-sans leading-[1.7]; overflow-wrap: anywhere; }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(rgb(30 45 61 / 25%) 1px, transparent 1px), linear-gradient(90deg, rgb(30 45 61 / 25%) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  h1, h2 { @apply font-bold tracking-[-.02em] text-heading; }
+  h2 { @apply mb-5 text-[clamp(1.6rem,3.5vw,2.4rem)]; }
+  p { @apply mb-4; }
+  p:last-child { @apply mb-0; }
+  a, button { -webkit-tap-highlight-color: transparent; }
+  a, button, [tabindex] { scroll-margin-block: 7rem 2rem; }
+  :focus-visible { @apply outline-2 outline-offset-4 outline-accent; }
+  button { @apply cursor-pointer; }
+}
+
+@layer components {
+  .button { @apply inline-flex min-h-11 min-w-11 items-center justify-center gap-2.5 border font-mono text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent; }
+  .button-default { @apply px-4 py-2; }
+  .button-compact { @apply px-3.5 py-1.5 max-[400px]:px-2; }
+  .button-primary { @apply border-accent bg-accent text-black font-bold hover:bg-accent/90; }
+  .button-secondary { @apply border-control text-copy hover:border-accent hover:text-accent; }
+  .button-outline { @apply border-accent text-accent hover:bg-accent hover:text-black; }
+  .button-ghost { @apply border-transparent text-accent hover:bg-raised; }
+  .button:disabled { @apply cursor-not-allowed border-control bg-panel text-muted; }
+  .wrap { @apply relative z-10 mx-auto max-w-[900px] px-6; }
+  .section { @apply scroll-mt-20 border-b border-line py-20; }
+  .section-tag { @apply mb-4 flex items-center gap-2 font-mono text-[.7rem] tracking-[.2em] text-accent uppercase; }
+  .section-tag::before { content: '//'; @apply text-muted; }
+  .intro { @apply mb-8 text-[1.05rem] text-muted; }
+  .text-link { @apply border-b border-dotted border-accent text-accent no-underline hover:text-white; }
+  .panel-header { @apply flex items-center gap-2 border-b border-line bg-raised px-4 py-2.5 font-mono text-[.7rem] tracking-[.1em] text-muted; }
+  .sensor-dot { @apply inline-block size-[7px] shrink-0 rounded-full bg-signal; }
+  .mark { @apply block w-auto rounded-md bg-white px-[7px] py-[5px]; }
+  .card-title { @apply mb-2.5 font-mono text-[.8rem] tracking-[.1em] text-accent uppercase; }
+  .topic { @apply border border-line px-3 py-1.5 font-mono text-xs tracking-[.05em] text-muted transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
