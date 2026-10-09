@@ -3,7 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hardware UX</title>
+  <title>Hardware Interaction Design Conference — Oct 23, 2026</title>
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="theme-color" content="#080c10" />
+  <link rel="canonical" href="https://hardwareux.com/" />
+  <meta name="description" content="A one-day conference on designing better experiences in the physical world — talks and hands-on workshops for the people who design, research, prototype, and ship hardware. Fri 23 Oct 2026, High Tech Campus, Eindhoven." />
+
+  <!-- ── OPEN GRAPH / SOCIAL ── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Hardware Interaction Design" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://hardwareux.com/" />
+  <meta property="og:title" content="Hardware Interaction Design Conference — 23 Oct 2026, Eindhoven" />
+  <meta property="og:description" content="A one-day conference on designing better experiences in the physical world — talks and hands-on workshops for the people who design, research, prototype, and ship hardware." />
+  <meta property="og:image" content="https://hardwareux.com/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Hardware Interaction Design Conference — Fri 23 Oct 2026, High Tech Campus, Eindhoven, during Dutch Design Week." />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Hardware Interaction Design Conference — 23 Oct 2026, Eindhoven" />
+  <meta name="twitter:description" content="A one-day conference on designing better experiences in the physical world — talks and hands-on workshops for the people who design, research, prototype, and ship hardware." />
+  <meta name="twitter:image" content="https://hardwareux.com/og-image.png" />
+  <meta name="twitter:image:alt" content="Hardware Interaction Design Conference — Fri 23 Oct 2026, High Tech Campus, Eindhoven, during Dutch Design Week." />
   <style>
     :root {
       --bg: #080c10;
@@ -54,8 +80,22 @@
       padding: 14px 0;
     }
     nav .wrap { display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo { font-family: var(--mono); font-size: .85rem; letter-spacing: .1em; color: var(--accent); text-decoration: none; }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      font-family: var(--mono); font-size: .85rem; letter-spacing: .1em; color: var(--accent); text-decoration: none;
+    }
     .nav-logo span { color: var(--muted); }
+
+    /* white plate keeps the dark PCB mark legible on the dark page */
+    .mark {
+      display: block; width: auto;
+      background: #fff; border-radius: 6px;
+      padding: 5px 7px;
+    }
+    .nav-mark { height: 18px; }
+    @media (max-width: 520px) {
+      .nav-name { display: none; }
+    }
     nav a.cta-sm {
       font-size: .8rem; font-family: var(--mono); letter-spacing: .08em;
       color: var(--accent); border: 1px solid var(--accent);
@@ -75,6 +115,12 @@
       display: flex; align-items: center; gap: 10px;
     }
     .hero-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--accent); opacity: .3; max-width: 80px; }
+    .hero-mark {
+      height: auto; width: 260px; max-width: 70%;
+      border-radius: 12px; padding: 16px 20px;
+      margin-bottom: 34px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.55);
+    }
     h1 {
       font-size: clamp(2.4rem, 6vw, 4.2rem);
       font-weight: 700; line-height: 1.1; letter-spacing: -.02em;
@@ -100,6 +146,79 @@
     .cta-btn:hover::before { transform: translateX(0); }
     .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(240,165,0,.3); }
     .cta-arrow { font-size: 1.1rem; }
+
+    /* ── TICKET PANEL (WHEN / WHERE / WHAT) ── */
+    .ticket-panel {
+      margin: 40px 0 36px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      overflow: hidden;
+    }
+    .ticket-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px;
+      background: var(--bg3); border-bottom: 1px solid var(--border);
+      font-family: var(--mono); font-size: .7rem; color: var(--muted); letter-spacing: .1em;
+    }
+    .ticket-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .ticket-cell {
+      padding: 24px 22px;
+      border-right: 1px solid var(--border);
+    }
+    .ticket-cell:last-child { border-right: none; }
+    .ticket-label {
+      font-family: var(--mono); font-size: .65rem; letter-spacing: .15em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .ticket-value {
+      font-size: 1.35rem; font-weight: 700; color: #e8f0f8;
+      line-height: 1.2; margin-bottom: 6px;
+    }
+    .ticket-sub { font-size: .85rem; color: var(--muted); line-height: 1.4; }
+    .ticket-cell a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+    .ticket-cell a:hover { color: #fff; }
+
+    @media (max-width: 700px) {
+      .ticket-grid { grid-template-columns: 1fr; }
+      .ticket-cell { border-right: none; border-bottom: 1px solid var(--border); }
+      .ticket-cell:last-child { border-bottom: none; }
+    }
+
+    /* ── HERO VISUAL (PHOTO) ── */
+    .hero-visual {
+      position: relative;
+      margin: 40px 0 0;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .hero-visual img {
+      display: block; width: 100%; height: auto;
+      max-height: 420px; object-fit: cover;
+      filter: grayscale(1) contrast(1.15) brightness(.75);
+    }
+    .hero-visual::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(155deg, rgba(240,165,0,.4), rgba(0,200,160,.25) 60%, rgba(8,12,16,.3));
+      mix-blend-mode: color;
+    }
+    .hero-visual-tag {
+      position: absolute; top: 12px; left: 14px; z-index: 2;
+      font-family: var(--mono); font-size: .65rem; letter-spacing: .15em;
+      color: #e8f0f8; text-transform: uppercase;
+      background: rgba(8,12,16,.55); padding: 5px 10px;
+    }
+    .hero-visual-caption {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+      display: flex; justify-content: space-between; gap: 12px;
+      padding: 12px 14px;
+      background: linear-gradient(to top, rgba(8,12,16,.92), transparent);
+      font-family: var(--mono); font-size: .68rem; letter-spacing: .05em;
+      color: var(--text);
+    }
+    .hero-visual-caption span:last-child { color: var(--muted); white-space: nowrap; }
 
     /* ── SENSOR STATS PANEL ── */
     .sensor-panel {
@@ -171,22 +290,8 @@
     p { margin-bottom: 16px; color: var(--text); }
     p:last-child { margin-bottom: 0; }
 
-    /* ── WHY PANEL ── */
+    /* ── COPY HELPERS ── */
     .why-intro { font-size: 1.05rem; color: var(--muted); margin-bottom: 32px; }
-    .questions {
-      display: flex; flex-direction: column; gap: 0;
-      border-left: 2px solid var(--border); margin: 32px 0;
-    }
-    .question {
-      padding: 14px 20px;
-      font-family: var(--mono); font-size: .85rem; color: var(--text);
-      border-bottom: 1px solid var(--border);
-      transition: border-left-color .2s, color .2s;
-    }
-    .questions:hover .question { color: var(--muted); }
-    .question:hover { color: var(--accent) !important; border-left: 2px solid var(--accent); margin-left: -2px; }
-    .question::before { content: '→ '; color: var(--accent); opacity: .5; }
-    .why-close { font-size: 1rem; color: var(--text); }
     .highlight { color: var(--accent); font-weight: 600; }
 
     /* ── WHAT WE DO ── */
@@ -196,6 +301,16 @@
     .pillar-icon { font-size: 1.4rem; margin-bottom: 14px; }
     .pillar-title { font-family: var(--mono); font-size: .8rem; letter-spacing: .1em; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; }
     .pillar p { font-size: .9rem; color: var(--muted); }
+
+    /* ── VENUE / LOGISTICS ── */
+    .venue-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--border); margin-top: 40px; }
+    .venue-card { background: var(--bg2); padding: 28px 24px; transition: background .2s; }
+    .venue-card:hover { background: var(--bg3); }
+    .venue-icon { font-size: 1.4rem; margin-bottom: 14px; }
+    .venue-title { font-family: var(--mono); font-size: .8rem; letter-spacing: .1em; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; }
+    .venue-card p { font-size: .9rem; color: var(--muted); }
+    .venue-card a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+    .venue-card a:hover { color: #fff; }
 
     /* ── TOPICS ── */
     .topics-grid {
@@ -233,26 +348,134 @@
       .sensor-cell:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
       .sensor-cell:last-child { border-bottom: none; }
     }
+
+    /* ── PROGRAMME STATUS ── */
+    .programme-status {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: .7rem; letter-spacing: .1em;
+      color: var(--accent2); text-transform: uppercase;
+      border: 1px solid var(--border); padding: 6px 12px;
+      margin-bottom: 28px;
+    }
+
+    /* ── FEATURED PROGRAMME CARDS ── */
+    .featured-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-top: 36px;
+    }
+    .featured-card {
+      position: relative; z-index: 1;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      display: flex; flex-direction: column;
+    }
+    .featured-media {
+      position: relative;
+      aspect-ratio: 5 / 4;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .featured-media > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* partner panel instead of a photo: white wordmark on the dark plate */
+    .featured-media.is-logo > img { width: auto; height: 32px; max-width: 68%; object-fit: contain; }
+    /* logo chip over a photo, dark enough to survive a light image */
+    .featured-chip {
+      position: absolute; left: 12px; bottom: 12px;
+      background: rgba(8,12,16,.8); border: 1px solid var(--border);
+      border-radius: 5px; padding: 7px 10px;
+      backdrop-filter: blur(6px);
+    }
+    .featured-chip img { height: 15px; width: auto; display: block; }
+    .featured-chip img.invert { filter: invert(1); }
+    .featured-body { padding: 20px; flex: 1; }
+    .featured-eyebrow {
+      font-family: var(--mono); font-size: .65rem; letter-spacing: .15em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 8px;
+    }
+    .featured-title { font-size: 1.1rem; font-weight: 700; color: #e8f0f8; margin-bottom: 6px; }
+    .featured-body p { font-size: .9rem; color: var(--muted); margin-bottom: 0; }
+    .featured-body a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+    .featured-body a:hover { color: #fff; }
+    .cta-note a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+    .cta-note a:hover { color: #fff; }
+    @media (max-width: 760px) {
+      .featured-grid { grid-template-columns: 1fr; }
+      .featured-media { aspect-ratio: 16 / 9; }
+    }
+
+    /* ── TEXTURED SECTION BACKDROP ── */
+    section.section-textured { position: relative; }
+    section.section-textured::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url('4CEACD57-7583-4AE8-9F82-D40F02471D0C_1_105_c.jpeg');
+      background-size: cover; background-position: center 30%;
+      filter: grayscale(1) brightness(.35);
+      opacity: .14;
+      z-index: 0;
+    }
   </style>
 </head>
 <body>
 
 <nav>
   <div class="wrap">
-    <a class="nav-logo" href="#"><span>// </span>HARDWARE UX</a>
-    <a class="cta-sm" href="https://forms.gle/9G9bd8FyDzxz4YTr9" target="_blank" rel="noopener">JOIN THE COMMUNITY →</a>
+    <a class="nav-logo" href="#" aria-label="Hardware Interaction Design">
+      <img class="mark nav-mark" src="logo-mark.png" width="800" height="435" alt="" />
+      <span class="nav-name"><span>// </span>HARDWARE INTERACTION DESIGN</span>
+    </a>
+    <a class="cta-sm" href="https://forms.gle/9G9bd8FyDzxz4YTr9" target="_blank" rel="noopener">RESERVE YOUR SPOT →</a>
   </div>
 </nav>
 
 <!-- ═══════════════════════════════════════ HERO -->
 <header class="hero">
   <div class="wrap">
-    <div class="hero-eyebrow">Community · Practice · Industry</div>
-    <h1>Designing better<br/>experiences in the<br/>physical world</h1>
-    <p class="hero-sub">Hardware UX is a community for the people who design, research, prototype, and ship physical products.</p>
+    <img class="mark hero-mark" src="UX.png"  alt="Hardware Interaction Design" style="background:none!important;box-shadow:none;"/>
+    <div class="hero-eyebrow">Hardware Interaction Design</div>
+    <h1>Hardware<br/>Interaction Design<br/>Conference</h1>
+    <p class="hero-sub">A one-day conference on designing better experiences in the physical world — talks and hands-on workshops, for and by the people who design, research, prototype, and ship hardware.</p>
+
+    <!-- ── WHEN / WHERE / WHAT ── -->
+    <div class="ticket-panel">
+      <div class="ticket-header">
+        <span class="sensor-dot"></span>
+        EVENT DETAILS
+      </div>
+      <div class="ticket-grid">
+        <div class="ticket-cell">
+          <div class="ticket-label">When</div>
+          <div class="ticket-value">Fri 23 Oct 2026</div>
+          <div class="ticket-sub">Dutch Design Week — <a href="https://site.ddw.nl/en/programme/18408/hardware-interaction-design-conference" target="_blank" rel="noopener">DDW programme ↗</a></div>
+        </div>
+        <div class="ticket-cell">
+          <div class="ticket-label">Where</div>
+          <div class="ticket-value">High Tech Campus</div>
+          <div class="ticket-sub">1d The Strip, Eindhoven — <a href="https://share.google/HMqrJSUTkAtiunpXP" target="_blank" rel="noopener">map ↗</a></div>
+        </div>
+        <div class="ticket-cell">
+          <div class="ticket-label">What</div>
+          <div class="ticket-value">Talks, Workshops, Interactive sessions.</div>
+          <div class="ticket-sub">A planned programme, plus open time to bring &amp; share your own tools</div>
+        </div>
+      </div>
+    </div>
+
     <a class="cta-btn" href="https://forms.gle/9G9bd8FyDzxz4YTr9" target="_blank" rel="noopener">
-      Join the Community <span class="cta-arrow">↗</span>
+      Reserve Your Spot <span class="cta-arrow">↗</span>
     </a>
+
+    <!-- ── HERO VISUAL ── -->
+    <div class="hero-visual">
+      <span class="hero-visual-tag">// Physical Controls</span>
+      <img src="4CEACD57-7583-4AE8-9F82-D40F02471D0C_1_105_c.jpeg" alt="Close-up of rotary encoders, illuminated switches, and knobs on a hardware prototype board" />
+      <div class="hero-visual-caption">
+        <span>Rotary encoders, switches &amp; knobs</span>
+        <span>The building blocks of hardware UX</span>
+      </div>
+    </div>
 
     <!-- ── LIVE SENSOR PANEL ── -->
     <div class="sensor-panel">
@@ -315,62 +538,96 @@
   </div>
 </header>
 
-<!-- ═══════════════════════════════════════ WHO WE BRING TOGETHER -->
-<section>
+<!-- ═══════════════════════════════════════ PROGRAM -->
+<section class="section-textured">
   <div class="wrap">
-    <div class="section-tag">Who We Are</div>
-    <h2>The people behind physical products</h2>
-    <p>We bring together <span class="highlight">interaction designers</span>, <span class="highlight">UX researchers</span>, <span class="highlight">industrial designers</span>, <span class="highlight">mechanical engineers</span>, <span class="highlight">electronics engineers</span>, <span class="highlight">prototypers</span>, and product teams who care about how people experience hardware.</p>
-    <p>Because designing a button, a dial, a wearable, a speaker, a medical device, or a piece of industrial equipment comes with challenges that software communities rarely discuss.</p>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════ WHY -->
-<section>
-  <div class="wrap">
-    <div class="section-tag">Why Hardware UX</div>
-    <h2>Many of us are solving similar problems in isolation.</h2>
-    <p class="why-intro">Across industries, the same hard questions come up again and again:</p>
-
-    <div class="questions">
-      <div class="question">How do you run meaningful user research on a physical prototype?</div>
-      <div class="question">How do you measure and communicate haptic feedback?</div>
-      <div class="question">What makes a button feel responsive?</div>
-      <div class="question">Which suppliers are best for light guides, sensors, displays, switches, or prototyping services?</div>
-      <div class="question">How do you evaluate ergonomics, force curves, latency, discoverability, or accessibility in physical products?</div>
-    </div>
-
-    <p class="why-close">The answers exist across industries—but they're rarely shared. <span class="highlight">Hardware UX exists to change that.</span></p>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════ WHAT WE DO -->
-<section>
-  <div class="wrap">
-    <div class="section-tag">What We Do</div>
-    <h2>Four things we're here for.</h2>
+    <div class="section-tag">Program</div>
+    <h2>A planned programme, plus open time to share.</h2>
+    <div class="programme-status"><span class="sensor-dot"></span> Programme in progress — more talks &amp; workshops to be announced</div>
+    <p class="why-intro">One track, one venue, one day — a curated programme of talks and workshops, alongside open, unstructured interactive sessions where anyone can bring a tool, product, or method to try.</p>
 
     <div class="pillars">
       <div class="pillar">
         <div class="pillar-icon">⚡</div>
-        <div class="pillar-title">Learn</div>
-        <p>Talks, workshops, case studies, and practical discussions from professionals working on real products.</p>
+        <div class="pillar-title">Talks</div>
+        <p>Scheduled, practical talks and case studies from professionals working on real hardware products.</p>
       </div>
       <div class="pillar">
         <div class="pillar-icon">⇄</div>
-        <div class="pillar-title">Share</div>
-        <p>Exchange methods, tools, suppliers, research approaches, and lessons learned across industries.</p>
+        <div class="pillar-title">Workshops</div>
+        <p>Scheduled, hands-on sessions on specific tools and methods — part of the planned programme.</p>
       </div>
       <div class="pillar">
         <div class="pillar-icon">◎</div>
-        <div class="pillar-title">Connect</div>
-        <p>Meet people working at the intersection of hardware, software, research, engineering, and design.</p>
+        <div class="pillar-title">Interactive Sessions</div>
+        <p>Open, unstructured time to bring your own tool, product, or method and let other attendees try it.</p>
       </div>
-      <div class="pillar">
-        <div class="pillar-icon">△</div>
-        <div class="pillar-title">Advance the Practice</div>
-        <p>Build a stronger understanding of what great user experience means when the interface isn't just a screen.</p>
+    </div>
+
+    <div class="featured-grid">
+      <div class="featured-card">
+        <div class="featured-media">
+          <img src="hapticlabs.jpg" width="1000" height="821" loading="lazy" alt="Designing a haptic effect on a laptop with a Hapticlabs kit." />
+          <span class="featured-chip"><img class="invert" src="hapticlabs.svg" width="100" height="100" alt="Hapticlabs" /></span>
+        </div>
+        <div class="featured-body">
+          <div class="featured-eyebrow">Workshop</div>
+          <div class="featured-title">Hapticlabs</div>
+          <p>Hands-on haptic prototyping tools, with a session led by <strong style="color:var(--text);">Thomas Müller</strong>, CEO of <a href="https://www.hapticlabs.io/" target="_blank" rel="noopener">Hapticlabs ↗</a>.</p>
+        </div>
       </div>
+
+      <div class="featured-card">
+        <div class="featured-media">
+          <img src="schematik.jpg" width="900" height="600" loading="lazy" style="object-position: 28% 50%;" alt="An Arduino board wired to a breadboard, two buttons and a small OLED display reading SCHEMATIK, on a cutting mat." />
+          <span class="featured-chip"><img src="schematik.svg" width="371" height="55" alt="Schematik" /></span>
+        </div>
+        <div class="featured-body">
+          <div class="featured-eyebrow">Demo</div>
+          <div class="featured-title">Schematik</div>
+          <p>AI-based tools for embedded coding, presented by the team behind <a href="https://schematik.io/" target="_blank" rel="noopener">Schematik.io ↗</a>.</p>
+        </div>
+      </div>
+
+      <div class="featured-card">
+        <div class="featured-media">
+          <img src="teufel.jpg" width="800" height="663" loading="lazy" alt="A Teufel Bluetooth speaker laid out as separable parts: housing, grille, drivers, circuit board, strap, and screws." />
+          <span class="featured-chip"><img src="teufel.svg" width="235" height="88" alt="Teufel" /></span>
+        </div>
+        <div class="featured-body">
+          <div class="featured-eyebrow">Talk</div>
+          <div class="featured-title">Teufel</div>
+          <p>An open-source Bluetooth speaker built to be repaired and hacked, presented by <a href="https://teufel.de/" target="_blank" rel="noopener">Teufel ↗</a>.</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ VENUE & GETTING THERE -->
+<section>
+  <div class="wrap">
+    <div class="section-tag">Venue &amp; Getting There</div>
+    <h2>High Tech Campus, The Strip — Eindhoven.</h2>
+    <p class="why-intro">The conference takes place at <span class="highlight">1d The Strip, High Tech Campus</span>, on Friday 23 October 2026 — the Friday of <a href="https://ddw.nl/" target="_blank" rel="noopener" style="color:var(--accent);">Dutch Design Week</a>.</p>
+
+    <div class="venue-grid">
+      <div class="venue-card">
+        <div class="venue-icon">📍</div>
+        <div class="venue-title">Location</div>
+        <p>1d The Strip, High Tech Campus, Eindhoven. <a href="https://share.google/HMqrJSUTkAtiunpXP" target="_blank" rel="noopener">View on the map ↗</a></p>
+      </div>
+      <div class="venue-card">
+        <div class="venue-icon">🚗</div>
+        <div class="venue-title">By Car, Train, Plane or OV-fiets</div>
+        <p>Full directions by car, public transport, plane, and OV-fiets are on the campus's own <a href="https://www.hightechcampus.com/about-us/visit-the-campus/" target="_blank" rel="noopener">visitor page ↗</a>.</p>
+      </div>
+      <!--<div class="venue-card">
+        <div class="venue-icon">🚕</div>
+        <div class="venue-title">Volvo Design Rides</div>
+        <p>Look out for the conspicuous Volvo Design Rides — free DDW taxis that whisk visitors quickly and comfortably between locations.</p>
+      </div>-->
     </div>
   </div>
 </section>
@@ -378,7 +635,7 @@
 <!-- ═══════════════════════════════════════ TOPICS -->
 <section>
   <div class="wrap">
-    <div class="section-tag">Topics We Care About</div>
+    <div class="section-tag">What We'll Cover</div>
     <h2>The full spectrum of hardware UX.</h2>
     <div class="topics-grid">
       <span class="topic">User research for physical products</span>
@@ -406,23 +663,35 @@
 <!-- ═══════════════════════════════════════ JOIN -->
 <section>
   <div class="wrap">
-    <div class="section-tag">Join</div>
-    <h2>Physical products deserve a UX community of their own.</h2>
-    <p class="join-text">Whether you're designing headphones, medical devices, bicycles, power tools, smart home products, laboratory equipment, wearables, or something entirely different, Hardware UX is a place to learn from others facing similar challenges.</p>
-    <p class="join-closing">Physical products deserve a user experience community of their own.</p>
+    <div class="section-tag">Register</div>
+    <h2>Reserve your spot.</h2>
+    <p class="join-text">Whether you're designing headphones, medical devices, bicycles, power tools, smart home products, laboratory equipment, wearables, or something entirely different, this conference is a place to learn from others facing similar challenges — and, if you'd like, to bring your own tool, product, or method for others to try in a workshop.</p>
+    <p class="join-closing">Friday 23 October 2026 · High Tech Campus, Eindhoven · Dutch Design Week.</p>
     <div class="cta-group">
       <a class="cta-btn" href="https://forms.gle/9G9bd8FyDzxz4YTr9" target="_blank" rel="noopener">
-        Sign Up Now <span class="cta-arrow">↗</span>
+        Reserve Your Spot <span class="cta-arrow">↗</span>
       </a>
-      <span class="cta-note">Free to join &nbsp;·&nbsp; No spam &nbsp;·&nbsp; Just hardware people</span>
+      <span class="cta-note">Hosted by Hardware Interaction Design &nbsp;·&nbsp; No spam &nbsp;·&nbsp; <a href="https://site.ddw.nl/en/programme/18408/hardware-interaction-design-conference" target="_blank" rel="noopener">On the DDW programme ↗</a></span>
     </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ ABOUT (COMMUNITY) -->
+<section>
+  <div class="wrap">
+    <div class="section-tag">Hosted By</div>
+    <h2>The Hardware Interaction Design community.</h2>
+    <p>This is the first in-person event from <span class="highlight">Hardware Interaction Design</span>, a community for the interaction designers, UX researchers, industrial designers, and engineers who design, research, prototype, and ship physical products — because designing a button, a dial, or a wearable comes with challenges that software communities rarely discuss.</p>
   </div>
 </section>
 
 <footer>
   <div class="wrap" style="display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;gap:10px;">
-    <span>// HARDWARE UX</span>
-    <span>A community for physical product practitioners</span>
+    <span style="display:flex;align-items:center;gap:10px;">
+      <img class="mark" src="logo-mark.png" width="800" height="435" style="height:14px;padding:4px 6px;" alt="" />
+      // HARDWARE INTERACTION DESIGN
+    </span>
+    <span>Hardware Interaction Design Conference · 23 Oct 2026 · High Tech Campus, Eindhoven</span>
   </div>
 </footer>
 
@@ -675,6 +944,49 @@ window.addEventListener('load', () => {
     const w = c.width / dpr;
     drawBg(ctx, w, 60);
   });
+});
+
+
+// ═══════════════ ADD-TO-CALENDAR (.ics DOWNLOAD) ═══════════════
+// Event runs Fri 23 Oct 2026, 09:00–18:00 Europe/Amsterdam (CEST, UTC+2)
+
+function toICSTimestamp(date) {
+  return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+}
+
+function downloadEventICS() {
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Hardware Interaction Design Conference//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    'UID:hidc-2026-10-23@hardware-interaction-design',
+    'DTSTAMP:' + toICSTimestamp(new Date()),
+    'DTSTART:20261023T070000Z',
+    'DTEND:20261023T160000Z',
+    'SUMMARY:Hardware Interaction Design Conference',
+    'DESCRIPTION:Talks\\, workshops\\, and interactive sessions on designing physical products — plus open time to bring your own tool\\, product\\, or method to share.',
+    'LOCATION:High Tech Campus\\, 1d The Strip\\, Eindhoven\\, Netherlands',
+    'URL:https://forms.gle/9G9bd8FyDzxz4YTr9',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'hardware-interaction-design-conference.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.querySelectorAll('a[href*="forms.gle"]').forEach(btn => {
+  btn.addEventListener('click', downloadEventICS);
 });
 </script>
 </body>
