@@ -1,6 +1,6 @@
 export const registrationUrl = 'https://forms.gle/9G9bd8FyDzxz4YTr9';
 export const programmeUrl = 'https://site.ddw.nl/en/programme/18408/hardware-interaction-design-conference';
-export const mapUrl = 'https://share.google/HMqrJSUTkAtiunpXP';
+export const mapUrl = 'https://www.google.com/maps/place/Al+Fresco/@51.4107232,5.4586276,107m/data=!3m1!1e3!4m6!3m5!1s0x47c6d9b8ccb73305:0xb7e7f111912ae67b!8m2!3d51.4107023!4d5.4590172!16s%2Fg%2F11g6xmyz39!5m1!1e3';
 export const hardwarePhoto = '/4CEACD57-7583-4AE8-9F82-D40F02471D0C_1_105_c.jpeg';
 
 export const partners = [
@@ -17,16 +17,16 @@ export const partners = [
     url: 'https://schematik.io/', invert: false, lightChip: false, poster: true
   },
   {
-    name: 'Teufel', kind: 'Talk', time: '14:35', image: '/teufel.jpg', logo: '/teufel.svg',
+    name: 'Teufel', kind: 'Workshop', time: '14:35', image: '/teufel.jpg', logo: '/teufel.svg',
     width: 800, height: 663, logoWidth: 235, logoHeight: 88,
     alt: 'A Teufel Bluetooth speaker laid out as separable parts: housing, grille, drivers, circuit board, strap, and screws.',
-    url: 'https://teufel.de/', invert: false, lightChip: false, poster: true
+    url: 'https://lu.teufelaudio.com/mynd-107002004', invert: false, lightChip: false, poster: true
   },
   {
     name: 'OSHned', kind: 'Talk', time: '14:20', image: '/oshned.jpg', logo: '/oshned-logo.png',
     width: 800, height: 600, logoWidth: 182, logoHeight: 120,
     alt: 'Open-source syringe pumps built from 3D printer parts, beside an OSHNED sign: open-source research hardware, from lab robots to batteries and microscopes.',
-    url: '', invert: false, lightChip: true, poster: false
+    url: 'https://en.makerdays.nl/maker/oshned/', invert: false, lightChip: true, poster: false
   }
 ] as const;
 

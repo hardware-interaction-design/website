@@ -6,7 +6,7 @@
 
 <main class="relative z-10 flex min-h-screen w-full flex-col bg-[#080c10] px-6 py-10 text-[#f2f6fa] min-[1080px]:h-[1080px] min-[1080px]:min-h-0 min-[1080px]:w-[1080px] min-[1080px]:px-[72px] min-[1080px]:py-[76px]">
   <h1 class="text-[clamp(2rem,8vw,6.25rem)] leading-[.97] tracking-[-.035em] text-[#f2f6fa] min-[1080px]:text-[100px]">Hardware<br />Interaction Design<br />Conference</h1>
-  <div class="mt-[30px] text-2xl font-medium tracking-[-.01em] text-[#f0a500] min-[1080px]:text-[36px]">Friday 23 October 2026</div>
+  <div class="mt-[30px] text-2xl font-medium tracking-[-.01em] text-[#f0a500] min-[1080px]:text-[36px]">Friday 23 October 2026, 13:30</div>
   <div class="mt-10 grid gap-6 min-[600px]:grid-cols-3 min-[1080px]:mt-auto">
     {#each partners.filter(partner => partner.poster) as partner (partner.name)}
       <div>

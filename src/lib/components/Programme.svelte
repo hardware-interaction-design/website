@@ -42,7 +42,7 @@
               {:else if partner.name === 'Schematik'}
                 AI-based tools for embedded coding, presented by the team behind <ExternalLink href={partner.url}>Schematik.io</ExternalLink>.
               {:else if partner.name === 'OSHned'}
-                Open-source research hardware from Dutch universities, from lab robots to batteries and microscopes, brought together in one national network.
+                Open-source research hardware from Dutch universities, from lab robots to batteries and microscopes, brought together in one national network by <ExternalLink href={partner.url}>OSHned</ExternalLink>.
               {:else}
                 An open-source Bluetooth speaker built to be repaired and hacked. Take it apart with the UX hardware team at <ExternalLink href={partner.url}>Teufel</ExternalLink>.
               {/if}
