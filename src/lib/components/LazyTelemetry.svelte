@@ -37,13 +37,13 @@
   {#if Telemetry}
     <Telemetry />
   {:else}
-    <section class="mt-14 min-h-[30rem] border border-line bg-panel" aria-labelledby="telemetry-heading">
-      <div class="panel-header"><h2 id="telemetry-heading" class="mb-0 font-mono text-sm font-normal tracking-normal text-copy">Live input demo</h2></div>
-      <div class="p-5">
-        <p class="text-sm text-muted">Explore pointer, keyboard, and touch input. The demo loads as you approach this section.</p>
-        <p role="status" class="text-sm text-copy">{failed ? 'The demo could not load. Try again.' : loading ? 'Loading the input demo.' : ''}</p>
+    <section class="instrument min-h-[34rem]" aria-labelledby="telemetry-heading">
+      <div class="p-5 min-[601px]:px-6">
+        <h2 id="telemetry-heading" class="mb-1.5 text-[1.35rem] leading-tight font-semibold tracking-normal text-white [font-stretch:100%]">Live input demo</h2>
+        <p class="text-[.95rem] text-screen-muted">Measure your pointer, keys, clicks, and taps. The demo loads as you reach this section.</p>
+        <p role="status" class="text-[.95rem] text-screen-copy">{failed ? 'The demo could not load. Try again.' : loading ? 'Loading the input demo.' : ''}</p>
         <Button onclick={load} disabled={loading}>{failed ? 'Retry input demo' : 'Load input demo'}</Button>
-        <noscript><p class="mt-4 text-sm text-muted">Enable JavaScript to use the interactive demo. The conference information and registration links work without it.</p></noscript>
+        <noscript><p class="mt-4 text-[.95rem] text-screen-muted">Turn on JavaScript to use the demo. Conference details and registration work without it.</p></noscript>
       </div>
     </section>
   {/if}

@@ -1,6 +1,6 @@
 # Hardware Interaction Design
 
-Svelte 5 and SvelteKit, Bits UI, and Tailwind CSS 4. The conference page and square poster are prerendered for static hosting.
+Svelte 5 and SvelteKit, Bits UI, and Tailwind CSS 4. The community home page, the conference page, and the square poster are prerendered for static hosting.
 
 ## Development
 
@@ -22,13 +22,14 @@ npm test
 
 ## Files
 
-- `src/routes/+page.svelte`: conference page and metadata
+- `src/routes/+page.svelte`: community home page, featuring upcoming events, topics, and the input demo
+- `src/routes/events/eindhoven-2026/+page.svelte`: conference page and metadata, served at `/events/eindhoven-2026/`. Its trailing slash makes it a directory index, so it works without server rewrites. Old `/#program`, `/#venue`, `/#register`, and `/#about` links redirect here.
 - `src/routes/poster.html/+page.svelte`: share-card layout
 - `src/lib/components/`: navigation, registration links, programme cards, and telemetry
 - `src/lib/components/ui/`: shared action-button and button-styled-link primitives
-- `src/lib/conference.ts`: shared programme content and links
+- `src/lib/conference.ts`: shared programme content, the day's schedule, and links
 - `src/lib/calendar.ts`: calendar serialization, used by the prerendered `.ics` endpoint
-- `src/app.css`: Tailwind theme and shared styles
+- `src/app.css`: Tailwind theme and shared styles. Colours use `light-dark()`, so the page follows the system theme. `ThemeToggle.svelte` lets visitors override it and stores the choice in `localStorage`. A small script in `src/app.html` applies a saved choice before first paint.
 - `static/`: original images, logos, and favicons, served at their original URLs
 - `archive/`: original HTML and historical backup, retained as references but not deployed
 
@@ -40,7 +41,7 @@ Registration opens the external form in a new tab. The separate "Add to calendar
 
 Use `Button.svelte` for actions and `LinkButton.svelte` for navigation or downloads. Both accept native attributes, event handlers, snippets, attachments, a bindable `ref`, and additive classes. `Button` defaults to `type="button"`; disabled buttons retain native behavior. `LinkButton` keeps anchor semantics and adds `noopener noreferrer` when opening a new tab.
 
-The shared variants are `primary`, `secondary`, `outline`, and `ghost`. Sizes are `default` and `compact`, both with a minimum 44px target. Styles live in the `.button-*` rules in `src/app.css`, not in each feature wrapper. `RegistrationLink` and `CalendarDownload` supply domain-specific URLs and copy. The Bits UI trigger renders `Button` through its child snippet, preserving its forwarded ARIA attributes and event handlers.
+The shared variants are `primary`, `secondary`, `outline`, `ghost`, and `text`, a standalone text link with a full-size target. `ExternalLink` uses `text` when given `button`. Sizes are `default` and `compact`, both with a minimum 44px target. Styles live in the `.button-*` rules in `src/app.css`, not in each feature wrapper. `RegistrationLink` and `CalendarDownload` supply domain-specific URLs and copy. The Bits UI trigger renders `Button` through its child snippet, preserving its forwarded ARIA attributes and event handlers.
 
 Import components directly rather than through a barrel that pulls interactive features into static content. Vite keeps `ui/` in a shared `ui-controls` chunk to prevent the lazy demo from depending on a route chunk. Navigation stays eager; the telemetry model and chart renderer are lazy. Bundle-manifest regression tests verify these boundaries and that the poster does not import telemetry.
 

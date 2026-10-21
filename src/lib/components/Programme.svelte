@@ -1,41 +1,50 @@
 <script lang="ts">
-  import { partners, pillars, hardwarePhoto } from '$lib/conference';
+  import { afterPartyUrl, partners, schedule } from '$lib/conference';
   import ExternalLink from './ExternalLink.svelte';
+  const byTime = [...partners].sort((a, b) => a.time.localeCompare(b.time));
 </script>
 
-<section id="program" class="section relative" tabindex="-1" aria-labelledby="program-heading">
-  <div class="pointer-events-none absolute inset-0 bg-cover opacity-[.14] grayscale brightness-[.35]" style:background-image={`url('${hardwarePhoto}')`} style:background-position="center 30%" aria-hidden="true"></div>
+<section id="program" class="section bg-panel" tabindex="-1" aria-labelledby="program-heading">
   <div class="wrap">
-    <div class="section-tag">Program</div>
-    <h2 id="program-heading">A planned programme, plus open time to share.</h2>
-    <div class="mb-7 inline-flex items-center gap-2 border border-line px-3 py-1.5 font-mono text-xs tracking-[.1em] text-signal"><span class="sensor-dot" aria-hidden="true"></span> More talks and workshops will be announced.</div>
-    <p class="intro">One track, one venue, one day — a curated programme of talks and workshops, alongside open, unstructured interactive sessions where anyone can bring a tool, product, or method to try.</p>
-    <div class="mt-10 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-px bg-line">
-      {#each pillars as pillar (pillar.title)}
-        <div class="bg-panel px-6 py-7 transition-colors hover:bg-raised">
-          <div class="mb-3.5 text-[1.4rem]" aria-hidden="true">{pillar.icon}</div>
-          <h3 class="card-title">{pillar.title}</h3>
-          <p class="text-[.9rem] text-muted">{pillar.text}</p>
-        </div>
-      {/each}
-    </div>
-    <div class="mt-9 grid gap-4 min-[761px]:grid-cols-3">
-      {#each partners as partner (partner.name)}
-        <article class="relative flex flex-col border border-line bg-panel">
-          <div class="relative flex aspect-video items-center justify-center overflow-hidden border-b border-line bg-raised min-[761px]:aspect-[5/4]">
-            <img class="block size-full object-cover" style:object-position={partner.name === 'Schematik' ? '28% 50%' : 'center'} src={partner.image} width={partner.width} height={partner.height} loading="lazy" alt={partner.alt} />
-            <span class="absolute bottom-3 left-3 rounded-[5px] border border-line bg-background/80 px-2.5 py-[7px] backdrop-blur-sm"><img class={['block h-[15px] w-auto', partner.invert && 'invert']} src={partner.logo} width={partner.logoWidth} height={partner.logoHeight} alt={partner.name} /></span>
+    <h2 id="program-heading">Programme</h2>
+    <p class="intro">Lunch from 12:00, sessions from 13:30, then show and tell into the evening.</p>
+    <ol class="max-w-[54rem] border-t-2 border-heading">
+      {#each schedule as item (item.start)}
+        <li class={['grid gap-x-8 gap-y-1 border-b border-line py-4 min-[601px]:grid-cols-[8.5rem_minmax(0,1fr)]', item.offsite && 'mt-6 border-t border-dashed border-t-control']}>
+          <p class="mb-0 text-[1.05rem] font-semibold text-heading tabular-nums [font-stretch:85%]">
+            {#if item.end}<time>{item.start}</time>–<time>{item.end}</time>{:else}From <time>{item.start}</time>{/if}
+          </p>
+          <div>
+            <h3 class="text-[1.15rem]">
+              {#if item.host}<span class="block text-[.95rem] font-medium text-accent">{item.host}<span class="sr-only">:</span></span>{/if}
+              {item.title}
+            </h3>
+            {#if item.text}<p class="mt-1 text-muted">{item.text}</p>{/if}
+            {#if item.offsite}<ExternalLink button href={afterPartyUrl}>See the Open Socials event</ExternalLink>{/if}
           </div>
-          <div class="flex-1 p-5">
-            <div class="mb-2 font-mono text-[.65rem] tracking-[.15em] text-accent uppercase">{partner.kind}</div>
-            <h3 class="mb-1.5 text-[1.1rem] font-bold text-heading">{partner.name}</h3>
-            <p class="text-[.9rem] text-muted">
+        </li>
+      {/each}
+    </ol>
+
+    <div class="mt-20 grid gap-x-8 gap-y-12 min-[601px]:grid-cols-2 min-[1000px]:grid-cols-4">
+      {#each byTime as partner (partner.name)}
+        <article class="flex flex-col">
+          <div class="relative overflow-hidden rounded-[10px] bg-raised">
+            <img class="block aspect-[4/3] size-full object-cover" style:object-position={partner.name === 'Schematik' ? '28% 50%' : 'center'} src={partner.image} width={partner.width} height={partner.height} loading="lazy" alt={partner.alt} />
+            <span class={['absolute bottom-3 left-3 rounded-md px-2.5 py-[7px]', partner.lightChip ? 'bg-white' : 'bg-[#161817]']}><img class={['block w-auto', partner.lightChip ? 'h-[26px]' : 'h-[15px]', partner.invert && 'invert']} src={partner.logo} width={partner.logoWidth} height={partner.logoHeight} alt={partner.name} /></span>
+          </div>
+          <div class="mt-4">
+            <p class="mb-1 text-[.95rem] font-medium text-accent tabular-nums">{partner.time}</p>
+            <h3 class="mb-1.5 text-[1.2rem] leading-tight font-semibold text-heading">{partner.name}</h3>
+            <p class="text-muted">
               {#if partner.name === 'Hapticlabs'}
-                Hands-on haptic prototyping tools, with a session led by <strong class="text-copy">Thomas Müller</strong>, CEO of <ExternalLink href={partner.url}>Hapticlabs</ExternalLink>.
+                Hands-on haptic prototyping tools, with a session led by <strong class="font-semibold text-copy">Thomas Müller</strong>, CEO of <ExternalLink href={partner.url}>Hapticlabs</ExternalLink>.
               {:else if partner.name === 'Schematik'}
                 AI-based tools for embedded coding, presented by the team behind <ExternalLink href={partner.url}>Schematik.io</ExternalLink>.
+              {:else if partner.name === 'OSHned'}
+                Open-source research hardware from Dutch universities, from lab robots to batteries and microscopes, brought together in one national network.
               {:else}
-                An open-source Bluetooth speaker built to be repaired and hacked, presented by <ExternalLink href={partner.url}>Teufel</ExternalLink>.
+                An open-source Bluetooth speaker built to be repaired and hacked. Take it apart with the UX hardware team at <ExternalLink href={partner.url}>Teufel</ExternalLink>.
               {/if}
             </p>
           </div>

@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { activateTelemetry } from './helpers';
 import { readFileSync } from 'node:fs';
 
+const event = '/events/eindhoven-2026/';
 type Chunk = { file: string; name: string; imports?: string[]; dynamicImports?: string[]; isDynamicEntry?: boolean };
 const manifest: Record<string, Chunk> = JSON.parse(readFileSync('.svelte-kit/output/client/.vite/manifest.json', 'utf8'));
 const telemetryKey = 'src/lib/components/Telemetry.svelte';
@@ -15,11 +16,13 @@ function eagerDependencies(key: string, result = new Set<string>()): Set<string>
 
 test('production manifest keeps telemetry lazy and controls independent of routes', () => {
   const homepage = Object.keys(manifest).find(key => manifest[key].name === 'nodes/2')!;
-  const poster = Object.keys(manifest).find(key => manifest[key].name === 'nodes/3')!;
+  const conference = Object.keys(manifest).find(key => manifest[key].name === 'nodes/3')!;
+  const poster = Object.keys(manifest).find(key => manifest[key].name === 'nodes/4')!;
   const controls = Object.keys(manifest).find(key => manifest[key].name === 'ui-controls')!;
   expect(controls).toBeTruthy();
   expect(manifest[telemetryKey].isDynamicEntry).toBe(true);
   expect(eagerDependencies(homepage).has(telemetryKey)).toBe(false);
+  expect(eagerDependencies(conference).has(telemetryKey)).toBe(false);
   expect(eagerDependencies(poster).has(telemetryKey)).toBe(false);
   expect([...eagerDependencies(homepage)].some(key => manifest[key].dynamicImports?.includes(telemetryKey))).toBe(true);
   expect([...eagerDependencies(telemetryKey)].some(key => manifest[key].name === '2' || manifest[key].name.startsWith('nodes/'))).toBe(false);
@@ -31,7 +34,7 @@ test('telemetry mounts only near the viewport and is removed on navigation', asy
   await expect(page.locator('canvas')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Load input demo' })).toBeAttached();
   await activateTelemetry(page);
-  await expect(page.locator('canvas')).toHaveCount(4);
+  await expect(page.locator('canvas')).toHaveCount(3);
   await page.goto('/poster.html');
   await expect(page.locator('canvas')).toHaveCount(0);
 });
@@ -50,7 +53,7 @@ test('lazy telemetry exposes a retry when its chunk fails to load', async ({ pag
 test('calendar download works without JavaScript', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto(baseURL + '/');
+  await page.goto(baseURL + event);
   const [download] = await Promise.all([
     page.waitForEvent('download'),
     page.getByRole('link', { name: /^Add to calendar/ }).first().click()
@@ -61,15 +64,16 @@ test('calendar download works without JavaScript', async ({ browser, baseURL }) 
 
 test('shared buttons preserve native actions, link semantics, and pressed state', async ({ page }) => {
   await page.goto('/');
-  const menu = page.getByRole('button', { name: 'Section menu' });
+  const menu = page.getByRole('button', { name: 'Site menu' });
   await expect(menu).toHaveClass(/button-ghost/);
   await expect(menu).toHaveAttribute('type', 'button');
-  await expect(page.locator('nav a[target="_blank"]')).toHaveClass(/button-outline/);
-  await expect(page.locator('nav a[target="_blank"]')).toHaveAttribute('rel', /noopener/);
-  await expect(page.getByRole('link', { name: /^Add to calendar/ }).first()).toHaveClass(/button-secondary/);
   await activateTelemetry(page);
   const pause = page.getByRole('button', { name: 'Pause live input' });
   await expect(pause).toHaveClass(/button-secondary/);
   await pause.click();
   await expect(pause).toHaveAttribute('aria-pressed', 'true');
+  await page.goto(event);
+  await expect(page.locator('nav a[target="_blank"]')).toHaveClass(/button-outline/);
+  await expect(page.locator('nav a[target="_blank"]')).toHaveAttribute('rel', /noopener/);
+  await expect(page.getByRole('link', { name: /^Add to calendar/ }).first()).toHaveClass(/button-secondary/);
 });

@@ -1,64 +1,76 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/archivo/wdth.css';
 @source not '../archive';
 @source not '../tests';
 
 @theme {
-  --color-background: #080c10;
-  --color-panel: #0d1117;
-  --color-raised: #111820;
-  --color-line: #1e2d3d;
-  --color-accent: #f0a500;
-  --color-signal: #00c8a0;
-  --color-copy: #c9d8e8;
-  --color-muted: #91a8bd;
-  --color-control: #71869a;
-  --color-heading: #e8f0f8;
-  --font-mono: 'Courier New', Courier, monospace;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  /* The page reads as a device housing; the demo is the one screen set into it.
+     Each colour is light, dark. The theme follows the system unless the visitor picks one. */
+  --color-background: light-dark(#e2e3de, #191b1a);
+  --color-panel: light-dark(#ecedea, #212423);
+  --color-raised: light-dark(#d5d7d1, #2c302e);
+  --color-line: light-dark(#b9bcb4, #3b403d);
+  --color-accent: light-dark(#1d5a3c, #8fd0a8);
+  --color-on-accent: light-dark(#ffffff, #0f1a14);
+  --color-copy: light-dark(#2a2d2b, #d0d4d0);
+  --color-muted: light-dark(#535955, #a2aaa5);
+  --color-control: light-dark(#6d736f, #7e8681);
+  --color-heading: light-dark(#161817, #f0f2ee);
+  --color-bezel: light-dark(#c9cbc5, #2e3330);
+  --color-bezel-edge: light-dark(#b0b3ab, #4a504c);
+  --color-screen: #101513;
+  --color-screen-line: #26322c;
+  --color-screen-copy: #c9d6cf;
+  --color-screen-muted: #8fa298;
+  --color-gold: #e8b931;
+  --font-sans: 'Archivo Variable', system-ui, -apple-system, sans-serif;
 }
+
+:root { color-scheme: light dark; }
+:root[data-theme='light'] { color-scheme: light; }
+:root[data-theme='dark'] { color-scheme: dark; }
 
 @layer base {
   html { scroll-behavior: smooth; }
-  body { @apply bg-background text-copy font-sans leading-[1.7]; overflow-wrap: anywhere; }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: linear-gradient(rgb(30 45 61 / 25%) 1px, transparent 1px), linear-gradient(90deg, rgb(30 45 61 / 25%) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-  h1, h2 { @apply font-bold tracking-[-.02em] text-heading; }
-  h2 { @apply mb-5 text-[clamp(1.6rem,3.5vw,2.4rem)]; }
+  body { @apply bg-background text-copy font-sans text-[1.0625rem] leading-[1.6]; overflow-wrap: anywhere; font-stretch: 100%; }
+  h1, h2, h3 { @apply text-heading; }
+  h1 { @apply font-extrabold; font-stretch: 72%; }
+  h2 { @apply mb-5 text-[clamp(2rem,4.5vw,2.9rem)] leading-[1.02] font-bold tracking-[-.01em]; font-stretch: 78%; }
+  h3 { @apply text-[1.2rem] leading-[1.25] font-semibold; }
   p { @apply mb-4; }
   p:last-child { @apply mb-0; }
   a, button { -webkit-tap-highlight-color: transparent; }
-  a, button, [tabindex] { scroll-margin-block: 7rem 2rem; }
-  :focus-visible { @apply outline-2 outline-offset-4 outline-accent; }
+  a, button, [tabindex] { scroll-margin-block: 6rem 2rem; }
+  :focus-visible { @apply outline-2 outline-offset-3 outline-accent; }
   button { @apply cursor-pointer; }
+  ::selection { @apply bg-gold text-heading; }
 }
 
 @layer components {
-  .button { @apply inline-flex min-h-11 min-w-11 items-center justify-center gap-2.5 border font-mono text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent; }
-  .button-default { @apply px-4 py-2; }
-  .button-compact { @apply px-3.5 py-1.5 max-[400px]:px-2; }
-  .button-primary { @apply border-accent bg-accent text-black font-bold hover:bg-accent/90; }
-  .button-secondary { @apply border-control text-copy hover:border-accent hover:text-accent; }
-  .button-outline { @apply border-accent text-accent hover:bg-accent hover:text-black; }
-  .button-ghost { @apply border-transparent text-accent hover:bg-raised; }
-  .button:disabled { @apply cursor-not-allowed border-control bg-panel text-muted; }
-  .wrap { @apply relative z-10 mx-auto max-w-[900px] px-6; }
-  .section { @apply scroll-mt-20 border-b border-line py-20; }
-  .section-tag { @apply mb-4 flex items-center gap-2 font-mono text-[.7rem] tracking-[.2em] text-accent uppercase; }
-  .section-tag::before { content: '//'; @apply text-muted; }
-  .intro { @apply mb-8 text-[1.05rem] text-muted; }
-  .text-link { @apply border-b border-dotted border-accent text-accent no-underline hover:text-white; }
-  .panel-header { @apply flex items-center gap-2 border-b border-line bg-raised px-4 py-2.5 font-mono text-[.7rem] tracking-[.1em] text-muted; }
-  .sensor-dot { @apply inline-block size-[7px] shrink-0 rounded-full bg-signal; }
-  .mark { @apply block w-auto rounded-md bg-white px-[7px] py-[5px]; }
-  .card-title { @apply mb-2.5 font-mono text-[.8rem] tracking-[.1em] text-accent uppercase; }
-  .topic { @apply border border-line px-3 py-1.5 font-mono text-xs tracking-[.05em] text-muted transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent; }
+  .button { @apply inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md border text-[.95rem] font-semibold transition-[background-color,border-color,color,translate] duration-100 active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent; }
+  .button-default { @apply px-5 py-2.5; }
+  .button-compact { @apply px-3.5 py-1.5 max-[400px]:px-2.5; }
+  .button-primary { @apply border-accent bg-accent text-on-accent hover:border-heading hover:bg-heading hover:text-background; }
+  .button-secondary { @apply border-control text-heading hover:border-heading hover:bg-raised; }
+  .button-outline { @apply border-accent text-accent hover:bg-accent hover:text-on-accent; }
+  .button-ghost { @apply border-transparent text-heading hover:bg-raised; }
+  .button-text { @apply min-w-0 justify-start border-transparent px-0 py-2 font-medium text-accent underline decoration-1 underline-offset-[.25em] hover:text-heading active:translate-y-0; }
+  .button:disabled { @apply cursor-not-allowed border-line bg-panel text-muted active:translate-y-0; }
+  .wrap { @apply mx-auto max-w-[1120px] px-6 max-[400px]:px-4; }
+  .section { @apply scroll-mt-20 py-20 min-[761px]:py-28; }
+  .intro { @apply mb-8 max-w-[38rem] text-[1.2rem] leading-[1.5] text-muted; }
+  .text-link { @apply font-medium text-accent underline decoration-1 underline-offset-[.2em] hover:text-heading; }
+  /* The logo is black circuit board; dark mode sets it on a light plate so it stays visible. */
+  .mark { @apply box-content block w-auto rounded-[5px] px-1 py-0.5; background: light-dark(transparent, #d5d7d1); }
+  .topic { @apply border-t border-line py-2.5; }
+
+  /* The demo: a dark instrument screen, the only dark surface on the page. */
+  .instrument { @apply rounded-[14px] bg-screen text-screen-copy; box-shadow: 0 0 0 6px var(--color-bezel), 0 0 0 7px var(--color-bezel-edge); }
+  .instrument :focus-visible, .instrument .button:focus-visible { @apply outline-gold; }
+  .instrument .button-secondary { @apply border-screen-muted/60 text-screen-copy hover:border-screen-copy hover:bg-screen-line; }
+  .instrument .button:disabled { @apply border-screen-line bg-screen text-screen-muted; }
+  .sensor-dot { @apply inline-block size-2 shrink-0 rounded-full bg-gold; box-shadow: 0 0 6px 1px rgb(232 185 49 / 60%); }
+  .sensor-dot[data-paused='true'] { @apply bg-screen-muted; box-shadow: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
