@@ -29,12 +29,16 @@ test('production manifest keeps telemetry lazy and controls independent of route
   expect([...eagerDependencies(controls)].some(key => manifest[key].name === '2' || manifest[key].name.startsWith('nodes/'))).toBe(false);
 });
 
-test('telemetry mounts only near the viewport and is removed on navigation', async ({ page }) => {
+test('telemetry loads automatically near the viewport and unmounts on navigation', async ({ page }) => {
+  const requests: string[] = [];
+  page.on('request', request => { if (request.url().endsWith(manifest[telemetryKey].file)) requests.push(request.url()); });
   await page.goto('/');
   await expect(page.locator('canvas')).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'Load input demo' })).toBeAttached();
+  expect(requests).toEqual([]);
   await activateTelemetry(page);
   await expect(page.locator('canvas')).toHaveCount(3);
+  expect(requests).toHaveLength(1);
+  await expect(page.getByRole('button', { name: /Try the input demo|Close input demo/ })).toHaveCount(0);
   await page.goto('/poster.html');
   await expect(page.locator('canvas')).toHaveCount(0);
 });
@@ -50,16 +54,10 @@ test('lazy telemetry exposes a retry when its chunk fails to load', async ({ pag
   await expect(page.locator('section[aria-labelledby="telemetry-heading"]')).toHaveAttribute('data-ready', 'true');
 });
 
-test('calendar download works without JavaScript', async ({ browser, baseURL }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false });
-  const page = await context.newPage();
-  await page.goto(baseURL + event);
-  const [download] = await Promise.all([
-    page.waitForEvent('download'),
-    page.getByRole('link', { name: /^Add to calendar/ }).first().click()
-  ]);
-  expect(download.suggestedFilename()).toBe('hardware-interaction-design-conference.ics');
-  await context.close();
+test('legacy calendar URL stays available for existing links', async ({ request }) => {
+  const response = await request.get('/hardware-interaction-design-conference.ics');
+  expect(response.ok()).toBe(true);
+  expect(await response.text()).toContain('DTSTART:20261023T100000Z');
 });
 
 test('shared buttons preserve native actions, link semantics, and pressed state', async ({ page }) => {
@@ -75,5 +73,5 @@ test('shared buttons preserve native actions, link semantics, and pressed state'
   await page.goto(event);
   await expect(page.locator('nav a[target="_blank"]')).toHaveClass(/button-outline/);
   await expect(page.locator('nav a[target="_blank"]')).toHaveAttribute('rel', /noopener/);
-  await expect(page.getByRole('link', { name: /^Add to calendar/ }).first()).toHaveClass(/button-secondary/);
+  await expect(page.getByRole('link', { name: 'Next: Stockholm, early 2027' })).toHaveClass(/button-secondary/);
 });

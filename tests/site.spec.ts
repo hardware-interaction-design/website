@@ -4,13 +4,83 @@ import { InputTelemetry } from '../src/lib/telemetry';
 import { activateTelemetry } from './helpers';
 
 const event = '/events/eindhoven-2026/';
+
+test('external link labels are underlined without decorating their arrows', async ({ page }) => {
+  await page.goto(event);
+  const links = [page.locator('#recap a').first(), page.getByRole('link', { name: /^Original Dutch Design Week listing/ })];
+  for (const link of links) {
+    await expect(link).toHaveCSS('text-decoration-line', 'none');
+    await expect(link.locator('span').first()).toHaveCSS('text-decoration-line', 'underline');
+    await expect(link.locator('span[aria-hidden="true"]')).toHaveCSS('text-decoration-line', 'none');
+    await link.hover();
+    await expect(link).toHaveCSS('text-decoration-line', 'none');
+    await expect(link.locator('span[aria-hidden="true"]')).toHaveCSS('text-decoration-line', 'none');
+  }
+});
+
+test('the first screen explains the community and offers a join action and next event', async ({ page }) => {
+  for (const width of [375, 1280]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto('/');
+    await page.evaluate(() => document.fonts.ready);
+    const header = page.locator('main header');
+    await expect(header.getByRole('link', { name: /^Join on LinkedIn/ })).toBeInViewport({ ratio: 1 });
+    await expect(header.getByRole('link', { name: 'See events' })).toBeInViewport({ ratio: 1 });
+    await expect(header.getByRole('link', { name: 'Next event: Stockholm, early 2027' })).toBeInViewport({ ratio: 1 });
+  }
+});
+
+test('community comes before the ungated live input demo', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 800 });
+  await page.goto('/');
+  const order = await page.evaluate(() => {
+    const community = document.querySelector('#community')!.getBoundingClientRect();
+    const demo = document.querySelector('[data-testid="telemetry-loader"]')!.getBoundingClientRect();
+    return { communityBottom: community.bottom, demoTop: demo.top };
+  });
+  expect(order.communityBottom).toBeLessThan(order.demoTop);
+  await expect(page.locator('canvas')).toHaveCount(0);
+  await activateTelemetry(page);
+  await expect(page.locator('canvas')).toHaveCount(3);
+  await expect(page.getByRole('button', { name: /Try the input demo|Close input demo/ })).toHaveCount(0);
+});
+
+test('desktop exposes the same global destinations without opening the menu', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  for (const path of ['/', event]) {
+    await page.goto(path);
+    const nav = page.getByRole('navigation', { name: 'Main navigation' });
+    for (const name of ['Home', 'Events', 'Topics', 'Community']) {
+      await expect(nav.getByRole('link', { name, exact: true })).toBeVisible();
+    }
+  }
+  await page.goto('/');
+  const topics = page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Topics', exact: true });
+  await topics.click();
+  await expect(topics).toHaveAttribute('aria-current', 'location');
+});
+
+test('event photos stay inline without links or open controls', async ({ page }) => {
+  await page.goto(event);
+  const photos = page.locator('main figure img');
+  await expect(photos).toHaveCount(4);
+  for (const photo of await photos.all()) {
+    expect(await photo.evaluate(element => element.closest('a, button'))).toBeNull();
+  }
+  await expect(page.getByText('Full size', { exact: true })).toHaveCount(0);
+  const pages = page.context().pages().length;
+  await photos.first().click();
+  await expect(page).toHaveURL(new RegExp(event + '$'));
+  expect(page.context().pages()).toHaveLength(pages);
+});
+
 test('content, metadata, assets, and responsive layout', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hardware Interaction Design');
   await expect(page.locator('.topic')).toHaveCount(18);
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://hardwareux.com/og-image.png');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://hardwareux.com/events/eindhoven-2026/community-projects-and-conversations.jpg');
   await page.goto(event);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hardware Interaction Design Conference');
   await expect(page.locator('article')).toHaveCount(4);
@@ -26,13 +96,17 @@ test('content, metadata, assets, and responsive layout', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
-test('home page features the conference and links to its page', async ({ page }) => {
+test('home page separates upcoming Stockholm from past Eindhoven', async ({ page }) => {
   await page.goto('/');
-  const feature = page.getByRole('article', { name: 'Hardware Interaction Design Conference' });
+  const upcoming = page.getByRole('region', { name: 'Upcoming events' });
+  await expect(upcoming).toContainText('Stockholm');
+  await expect(upcoming).toContainText('Early 2027');
+  await expect(upcoming).toContainText('Date and venue to be announced.');
+  const feature = page.getByRole('region', { name: 'Past events' }).getByRole('article', { name: 'Hardware Interaction Design Conference' });
   await expect(feature).toContainText('Friday 23 October 2026');
-  await feature.getByRole('link', { name: /^See the programme/ }).click();
+  await feature.getByRole('link', { name: /^Read the recap/ }).click();
   await expect(page).toHaveURL(new RegExp(event + '$'));
-  await expect(page.locator('#program')).toBeVisible();
+  await expect(page.locator('header')).toContainText('Past event');
 });
 
 test('old conference section links move to the event page', async ({ page }) => {
@@ -40,7 +114,7 @@ test('old conference section links move to the event page', async ({ page }) => 
   await expect(page).toHaveURL(new RegExp(event + '#register$'));
 });
 
-test('Bits UI section menu opens, navigates, and closes with Escape', async ({ page }) => {
+test('Bits UI site menu opens, navigates, and closes with Escape', async ({ page }) => {
   await page.goto(event);
   const trigger = page.getByRole('button', { name: 'Site menu' });
   await trigger.click();
@@ -49,8 +123,8 @@ test('Bits UI section menu opens, navigates, and closes with Escape', async ({ p
   await expect(page.getByRole('menu')).toBeHidden();
   await expect(trigger).toBeFocused();
   await trigger.click();
-  await page.getByRole('menuitem', { name: 'Venue & getting there' }).click();
-  await expect(page).toHaveURL(/#venue$/);
+  await page.getByRole('menuitem', { name: 'All past events' }).click();
+  await expect(page).toHaveURL(/\/#past-events$/);
   await expect(page.getByRole('menu')).toBeHidden();
 });
 
@@ -62,31 +136,35 @@ test('narrow mobile layout has no horizontal overflow', async ({ page }) => {
   }
 });
 
-test('keyboard opens menu and selects a section', async ({ page }) => {
+test('keyboard opens menu and selects an archive destination', async ({ page }) => {
   await page.goto(event);
   await page.getByRole('button', { name: 'Site menu' }).focus();
   await page.keyboard.press('Enter');
   await page.keyboard.press('End');
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/#about$/);
+  await expect(page).toHaveURL(new RegExp(event + '$'));
 });
 
 test('both pages share one site menu that links across pages', async ({ page }) => {
   for (const path of ['/', event]) {
     await page.goto(path);
     await page.getByRole('button', { name: 'Site menu' }).click();
-    const items = await page.getByRole('menuitem').allTextContents();
-    expect(items).toEqual(['Home', 'Events', 'Topics', 'Live input demo', 'Conference overview', 'Programme', "Who you'll meet", 'Venue & getting there', 'Register', 'Hosted by']);
-    await expect(page.getByRole('menuitem', { name: path === '/' ? 'Home' : 'Conference overview' })).toHaveAttribute('aria-current', 'page');
+    const items = (await page.getByRole('menuitem').allTextContents()).map(text => text.replace('You are here', ''));
+    expect(items).toEqual(['Home', 'Events', 'Topics', 'Community', 'All past events', 'Eindhoven 2026 recap']);
+    const current = page.getByRole('menuitem', { name: path === '/' ? /^Home/ : /^Eindhoven 2026 recap/ });
+    await expect(current).toHaveAttribute('aria-current', 'page');
+    await expect(current).toContainText('You are here');
     await page.keyboard.press('Escape');
   }
   await page.getByRole('button', { name: 'Site menu' }).click();
   await page.getByRole('menuitem', { name: 'Topics' }).click();
   await expect(page).toHaveURL(/\/#topics$/);
   await page.getByRole('button', { name: 'Site menu' }).click();
-  await page.getByRole('menuitem', { name: 'Register' }).click();
-  await expect(page).toHaveURL(new RegExp(event + '#register$'));
-  await expect(page.locator('#register')).toBeInViewport();
+  await page.getByRole('menuitem', { name: 'Eindhoven 2026 recap' }).click();
+  await expect(page).toHaveURL(new RegExp(event + '$'));
+  await page.getByRole('navigation', { name: 'Conference sections' }).getByRole('link', { name: 'View photos' }).click();
+  await expect(page).toHaveURL(/#photos$/);
+  await expect(page.locator('#photos')).toBeInViewport();
 });
 
 test('pointer and keyboard telemetry update and canvases scale correctly', async ({ page }) => {
@@ -142,13 +220,13 @@ test('mouse clicks count as presses on the timeline', async ({ page }) => {
   await expect(page.getByRole('figure', { name: /^Press timeline\. 2 presses in the last 8 seconds/ })).toBeAttached();
 });
 
-test('registration opens the form without an unexpected download', async ({ page }) => {
-  await page.route('https://forms.gle/**', route => route.fulfill({ body: 'Registration form' }));
+test('community links open the LinkedIn group without an unexpected download', async ({ page }) => {
+  await page.route('https://www.linkedin.com/groups/42710001/**', route => route.fulfill({ body: 'Community group' }));
   await page.goto(event);
-  const links = page.locator('a[href="https://forms.gle/9G9bd8FyDzxz4YTr9"]');
+  const links = page.locator('a[href="https://www.linkedin.com/groups/42710001/"]');
   const downloads: string[] = [];
   page.on('download', download => downloads.push(download.suggestedFilename()));
-  await expect(links).toHaveCount(3);
+  await expect(links).toHaveCount(2);
   for (const link of await links.all()) {
     await expect(link).toHaveAttribute('target', '_blank');
     const [popup] = await Promise.all([
@@ -159,14 +237,21 @@ test('registration opens the form without an unexpected download', async ({ page
   expect(downloads).toEqual([]);
 });
 
-test('explicit calendar links download the event file', async ({ page }) => {
-  await page.goto(event);
-  const buttons = page.getByRole('link', { name: /^Add to calendar/ });
-  await expect(buttons).toHaveCount(2);
-  for (const button of await buttons.all()) {
-    const [download] = await Promise.all([page.waitForEvent('download'), button.click()]);
-    expect(download.suggestedFilename()).toBe('hardware-interaction-design-conference.ics');
+test('past event has a recap and photos, not live registration or calendar calls to action', async ({ page }) => {
+  for (const path of ['/', event]) {
+    await page.goto(path);
+    await expect(page.locator('a[href*="forms.gle"]')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /^Reserve your spot|^Add to calendar/ })).toHaveCount(0);
   }
+  await expect(page.locator('#register')).toContainText('Registration is closed.');
+  await expect(page.locator('main figure img')).toHaveCount(4);
+  for (const name of ['Thomas Müller', 'Stefanie Birk', 'Samuel Beek', 'Klemen Lilija', 'Hane Park', 'Jurrian Doornbos']) {
+    await expect(page.locator('#recap')).toContainText(name);
+  }
+  await expect(page.getByRole('link', { name: /^Lautsprecher Teufel/ })).toHaveAttribute('href', 'https://lu.teufelaudio.com/mynd-107002004');
+  await expect(page.getByRole('link', { name: /^OSHNED/ })).toHaveAttribute('href', 'https://en.makerdays.nl/maker/oshned/');
+  await page.getByText("View the day's programme", { exact: true }).click();
+  await expect(page.locator('#program ol')).toContainText('OSHned');
 });
 
 test('poster keeps the original URL and square dimensions', async ({ page }) => {
@@ -186,7 +271,12 @@ test('static HTML includes content without JavaScript', async ({ browser, baseUR
   await page.goto(baseURL + event);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await expect(page.locator('article')).toHaveCount(4);
-  await expect(page.locator('a[href*="forms.gle"]')).toHaveCount(3);
+  await expect(page.locator('a[href*="forms.gle"]')).toHaveCount(0);
+  await expect(page.locator('#register')).toContainText('Registration is closed.');
+  await expect(page.locator('main figure img')).toHaveCount(4);
+  await page.goto(baseURL + '/');
+  await expect(page.getByRole('region', { name: 'Upcoming events' })).toContainText('Stockholm');
+  await expect(page.getByRole('region', { name: 'Past events' })).toBeVisible();
   await context.close();
 });
 

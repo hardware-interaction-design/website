@@ -22,20 +22,24 @@ npm test
 
 ## Files
 
-- `src/routes/+page.svelte`: community home page, featuring upcoming events, topics, and the input demo
-- `src/routes/events/eindhoven-2026/+page.svelte`: conference page and metadata, served at `/events/eindhoven-2026/`. Its trailing slash makes it a directory index, so it works without server rewrites. Old `/#program`, `/#venue`, `/#register`, and `/#about` links redirect here.
+- `src/routes/+page.svelte`: community home page, with the Stockholm early-2027 teaser, past events, topics, the input demo, and the LinkedIn group
+- `src/routes/events/eindhoven-2026/+page.svelte`: past-event recap, photos, and original programme, served at the unchanged `/events/eindhoven-2026/` URL. Its trailing slash makes it a directory index, so it works without server rewrites. Old `/#program`, `/#venue`, `/#register`, and `/#about` links redirect here; those sections remain valid on the recap.
 - `src/routes/poster.html/+page.svelte`: share-card layout
-- `src/lib/components/`: navigation, registration links, programme cards, and telemetry
+- `src/lib/components/`: shared site navigation, archived programme, links, and telemetry
+- `src/lib/components/EventPhoto.svelte`: inline event photos with captions and alt text. Photos are not clickable and have no open controls.
 - `src/lib/components/ui/`: shared action-button and button-styled-link primitives
 - `src/lib/conference.ts`: shared programme content, the day's schedule, and links
 - `src/lib/calendar.ts`: calendar serialization, used by the prerendered `.ics` endpoint
 - `src/app.css`: Tailwind theme and shared styles. Colours use `light-dark()`, so the page follows the system theme. `ThemeToggle.svelte` lets visitors override it and stores the choice in `localStorage`. A small script in `src/app.html` applies a saved choice before first paint.
 - `static/`: original images, logos, and favicons, served at their original URLs
+- `static/events/eindhoven-2026/`: the four event photos, renamed from numeric filenames at the repository root. `eventPhotos` in `src/lib/conference.ts` holds their paths, alt text, and captions. The original 1280 × 853 JPEGs are preserved.
 - `archive/`: original HTML and historical backup, retained as references but not deployed
 
-Input telemetry stays in the browser. `LazyTelemetry.svelte` imports the demo when it is within 240px of the viewport, or when a visitor requests it. Its loading and retry states remain keyboard accessible. Event listeners, chart observers, and timers are removed when the demo unmounts. The demo can be paused and starts paused for visitors who prefer reduced motion. Each chart has a screen-reader text summary.
+Input telemetry stays in the browser. `LazyTelemetry.svelte` imports and mounts the demo automatically within 240px of the viewport as visitors scroll toward it, after the community section. There is no open/close gate. If IntersectionObserver is unavailable, it loads immediately. Loading and retry states remain keyboard accessible. Navigating away unmounts the demo and removes event listeners, chart observers, and timers. The demo can be paused and starts paused for visitors who prefer reduced motion. Each chart has a screen-reader text summary.
 
-Registration opens the external form in a new tab. The separate "Add to calendar" links download `/hardware-interaction-design-conference.ics`. SvelteKit prerenders that endpoint, so downloading the file needs neither JavaScript nor a server at runtime.
+Global navigation is identical on both pages. Desktop shows Home, Events, Topics, and Community directly. The shared six-link menu puts these ahead of past-event destinations, with visible current-page feedback. Recap-specific anchors live in the recap header, not in the global menu. The header joins the LinkedIn group and retains its mobile scroll-up reveal.
+
+Eindhoven registration is closed, and live pages no longer promote the old registration form or calendar download. `/hardware-interaction-design-conference.ics` and `/poster.html` remain available as historical assets for existing links. The shared navigation now links to the LinkedIn group. Stockholm has only an early-2027 teaser, with no exact date, venue, programme, or registration announced.
 
 ## Component boundaries
 

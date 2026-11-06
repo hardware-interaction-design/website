@@ -7,6 +7,8 @@ const tags = ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa', 'best-practice'];
 
 test('homepage and open navigation pass automated accessibility checks', async ({ page }) => {
   await page.goto('/');
+  const compact = await new AxeBuilder({ page }).withTags(tags).analyze();
+  expect(compact.violations).toEqual([]);
   await activateTelemetry(page);
   const closed = await new AxeBuilder({ page }).withTags(tags).analyze();
   expect(closed.violations).toEqual([]);
@@ -40,11 +42,9 @@ test('skip link moves keyboard focus to main content', async ({ page }) => {
   await expect(page.locator('#main')).toBeFocused();
 });
 
-test('site menu moves focus to a section on the current page', async ({ page }) => {
+test('recap shortcuts move keyboard focus to the selected section', async ({ page }) => {
   await page.goto(event);
-  await page.getByRole('button', { name: 'Site menu' }).focus();
-  await page.keyboard.press('Enter');
-  await page.keyboard.press('End');
+  await page.getByRole('navigation', { name: 'Conference sections' }).getByRole('link', { name: 'With thanks' }).focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('#about')).toBeFocused();
   await page.keyboard.press('Tab');
@@ -54,7 +54,9 @@ test('site menu moves focus to a section on the current page', async ({ page }) 
 test('navigation has readable labels and large touch targets', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await page.goto(event);
+  expect((await page.getByRole('navigation', { name: 'Main navigation' }).boundingBox())!.height).toBeLessThan(80);
   for (const control of await page.locator('nav a, nav button').all()) {
+    if (!await control.isVisible()) continue;
     const bounds = await control.boundingBox();
     expect(bounds?.height).toBeGreaterThanOrEqual(44);
     expect(bounds?.width).toBeGreaterThanOrEqual(44);
@@ -155,8 +157,8 @@ test('on phones the navigation hides on scroll down and returns on scroll up', a
   await page.mouse.wheel(0, -200);
   await expect.poll(top).toBe(0);
   await page.getByRole('button', { name: 'Site menu' }).click();
-  await page.getByRole('menuitem', { name: 'Register' }).click();
-  await expect(page.locator('#register')).toBeFocused();
+  await page.getByRole('menuitem', { name: 'Community', exact: true }).click();
+  await expect(page.locator('#community')).toBeFocused();
 });
 
 test('on wide screens the navigation stays visible while scrolling down', async ({ page }) => {

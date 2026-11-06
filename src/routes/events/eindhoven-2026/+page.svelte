@@ -1,127 +1,132 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import Navigation from '$lib/components/Navigation.svelte';
-  import RegistrationLink from '$lib/components/RegistrationLink.svelte';
-  import CalendarDownload from '$lib/components/CalendarDownload.svelte';
+  import LinkButton from '$lib/components/ui/LinkButton.svelte';
   import ExternalLink from '$lib/components/ExternalLink.svelte';
   import Programme from '$lib/components/Programme.svelte';
-  import { eventPath, hardwarePhoto, mapUrl, programmeUrl, travelUrl } from '$lib/conference';
-  const description = 'A one-day conference on designing better experiences in the physical world — talks and hands-on workshops for the people who design, research, prototype, and ship hardware.';
-  const socialTitle = 'Hardware Interaction Design Conference — 23 Oct 2026, Eindhoven';
-  const imageAlt = 'Hardware Interaction Design Conference — Fri 23 Oct 2026, High Tech Campus, Eindhoven, during Dutch Design Week.';
+  import EventPhoto from '$lib/components/EventPhoto.svelte';
+  import { communityUrl, eventPath, eventPhotos, partners, programmeUrl } from '$lib/conference';
+  const description = 'A look back at our first Hardware Interaction Design conference, held at Student Base in Eindhoven on 23 October 2026 during Dutch Design Week.';
+  const socialTitle = 'Eindhoven 2026 recap | Hardware Interaction Design';
+  const gallery = [eventPhotos.repair, eventPhotos.workshop, eventPhotos.community];
+  const partnerUrl = (name: (typeof partners)[number]['name']) => partners.find(partner => partner.name === name)!.url;
 </script>
 
 <svelte:head>
-  <title>Hardware Interaction Design Conference — Oct 23, 2026</title>
+  <title>Eindhoven 2026 recap | Hardware Interaction Design</title>
   <link rel="canonical" href={'https://hardwareux.com' + eventPath} />
-  <meta name="description" content={description + ' Fri 23 Oct 2026, Student Base, The Strip, High Tech Campus, Eindhoven.'} />
+  <meta name="description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Hardware Interaction Design" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:url" content={'https://hardwareux.com' + eventPath} />
   <meta property="og:title" content={socialTitle} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content="https://hardwareux.com/og-image.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content={imageAlt} />
+  <meta property="og:image" content={'https://hardwareux.com' + eventPhotos.talk.src} />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1280" />
+  <meta property="og:image:height" content="853" />
+  <meta property="og:image:alt" content={eventPhotos.talk.alt} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={socialTitle} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content="https://hardwareux.com/og-image.png" />
-  <meta name="twitter:image:alt" content={imageAlt} />
+  <meta name="twitter:image" content={'https://hardwareux.com' + eventPhotos.talk.src} />
+  <meta name="twitter:image:alt" content={eventPhotos.talk.alt} />
 </svelte:head>
 
 <a href="#main" class="fixed top-2 left-2 z-[200] -translate-y-24 rounded-md bg-accent px-4 py-2 text-on-accent focus:translate-y-0">Skip to content</a>
 <div id="top">
   <Navigation />
   <main id="main" tabindex="-1">
-    <header class="pt-14 pb-20 min-[761px]:pt-20">
+    <header class="pt-8 pb-12 min-[761px]:pt-12 min-[761px]:pb-16">
       <div class="wrap">
-        <h1 class="text-[clamp(3.1rem,9vw,6.75rem)] leading-[.9] tracking-[-.015em] text-balance">Hardware Interaction Design Conference</h1>
-        <p class="mt-8 max-w-[36rem] text-[1.25rem] leading-[1.5] text-copy">A one-day conference on designing better experiences in the physical world. Talks and hands-on workshops, for and by the people who design, research, prototype, and ship hardware.</p>
-        <dl class="mt-12 grid gap-x-10 gap-y-8 border-t-2 border-heading pt-6 min-[761px]:grid-cols-3">
-          <div>
-            <dt class="text-[.95rem] font-medium text-muted">When</dt>
-            <dd class="mt-1 text-[1.6rem] leading-[1.15] font-bold text-heading [font-stretch:85%]">Friday 23 October 2026</dd>
-            <dd class="mt-1.5 text-[.95rem] text-muted">Lunch from 12:00, programme from 13:30, during Dutch Design Week</dd>
-            <dd><ExternalLink button href={programmeUrl}>See the DDW listing</ExternalLink></dd>
+        <p class="mb-4 text-[1.05rem] font-medium text-accent">Past event, Eindhoven, <time datetime="2026-10-23">23 October 2026</time></p>
+        <h1 class="text-[clamp(2.75rem,7vw,5.25rem)] leading-[.95] tracking-[-.015em] text-balance">Hardware Interaction Design Conference</h1>
+        <div class="mt-8 grid items-start gap-8 min-[900px]:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] min-[900px]:gap-12">
+          <div class="max-w-[38rem]">
+            <p class="text-[1.15rem] leading-[1.5] text-copy">Our first conference brought designers, researchers, and hardware teams to Student Base during Dutch Design Week. We tried haptics, took speakers apart, and shared projects.</p>
+            <p class="mt-5 text-muted">Hosted by Frank van Valkenhoef and Geert Roumen at the High Tech Campus, Eindhoven.</p>
+            <nav aria-label="Conference sections" class="mt-6 flex flex-wrap gap-x-6 gap-y-1 border-t border-line pt-2">
+              <a href="#recap" class="text-link inline-flex min-h-11 items-center">Read the recap</a>
+              <a href="#photos" class="text-link inline-flex min-h-11 items-center">View photos</a>
+              <a href="#program" class="text-link inline-flex min-h-11 items-center">Original programme</a>
+              <a href="#about" class="text-link inline-flex min-h-11 items-center">With thanks</a>
+            </nav>
           </div>
-          <div>
-            <dt class="text-[.95rem] font-medium text-muted">Where</dt>
-            <dd class="mt-1 text-[1.6rem] leading-[1.15] font-bold text-heading [font-stretch:85%]">Student Base, The Strip</dd>
-            <dd class="mt-1.5 text-[.95rem] text-muted">First floor, High Tech Campus 1d, Eindhoven</dd>
-            <dd><ExternalLink button href={mapUrl}>Open in maps</ExternalLink></dd>
-          </div>
-          <div>
-            <dt class="text-[.95rem] font-medium text-muted">Format</dt>
-            <dd class="mt-1 text-[1.6rem] leading-[1.15] font-bold text-heading [font-stretch:85%]">Talks, workshops, and show and tell</dd>
-            <dd class="mt-1.5 text-[.95rem] text-muted">Bring a tool, product, or method of your own to share</dd>
-          </div>
-        </dl>
-        <div class="mt-10 flex flex-wrap items-center gap-3"><RegistrationLink /><CalendarDownload /></div>
-        <p class="mt-3 text-[.9rem] text-muted">Registration opens in a new tab. The calendar file downloads separately.</p>
-        <figure class="mt-16">
-          <img class="block aspect-[4/3] h-auto w-full rounded-[10px] object-cover min-[761px]:aspect-[21/9]" style:object-position="center 62%" src={hardwarePhoto} width="1024" height="768" alt="Close-up of rotary encoders, illuminated switches, and knobs on a hardware prototype board" />
-          <figcaption class="mt-3 text-[.9rem] text-muted">Rotary encoders and illuminated knobs on a component test board, the building blocks of hardware UX.</figcaption>
-        </figure>
+          <EventPhoto photo={eventPhotos.talk} eager />
+        </div>
       </div>
     </header>
-    <Programme />
-    <section id="people" class="section" tabindex="-1" aria-labelledby="people-heading">
-      <div class="wrap grid gap-x-16 gap-y-6 min-[900px]:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-        <h2 id="people-heading">Who you'll meet</h2>
-        <div class="max-w-[38rem] text-[1.1rem] min-[900px]:pt-2">
-          <p>The room is a mix: research professors from TU/e, researchers and PhD students, startups, company owners and self-employed designers, and people from larger organisations such as Accenture, Philips, and LEGO.</p>
-          <p>All of them work in the space between user experience and hardware, and all of them are doing something worth asking about.</p>
-        </div>
-      </div>
-    </section>
-    <section id="venue" class="section bg-panel" tabindex="-1" aria-labelledby="venue-heading">
-      <div class="wrap grid gap-x-16 gap-y-10 min-[900px]:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-        <div>
-          <h2 id="venue-heading">Getting to Student Base</h2>
-          <p class="intro mb-0">Student Base is on the first floor of The Strip, High Tech Campus 1d, Eindhoven. Lunch is next door at Al Fresco, the Italian place behind Student Base.</p>
-        </div>
-        <div class="grid gap-8 min-[601px]:grid-cols-2 min-[900px]:pt-3">
-          <div class="border-t border-line pt-4">
-            <h3 class="mb-2">By car</h3>
-            <p class="text-muted">Parking is free. P0 Parkeergarage is the easiest one to aim for.</p>
-            <ExternalLink button href={mapUrl}>Open the campus map</ExternalLink>
-          </div>
-          <div class="border-t border-line pt-4">
-            <h3 class="mb-2">Without a car</h3>
-            <p class="text-muted">Rent a bike, or take the Dutch Design Week design rides if you have a wristband.</p>
-            <ExternalLink button href={travelUrl}>Campus travel directions</ExternalLink>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section id="register" class="section" tabindex="-1" aria-labelledby="register-heading">
+
+    <section id="recap" class="section bg-panel" tabindex="-1" aria-labelledby="recap-heading">
       <div class="wrap">
-        <h2 id="register-heading" class="text-[clamp(2.4rem,6vw,4rem)]">Reserve your spot</h2>
-        <p class="max-w-[38rem] text-[1.15rem]">Whether you design headphones, medical devices, bicycles, power tools, smart home products, lab equipment, or wearables, you'll meet people facing the same problems. You can also bring your own tool, product, or method for others to try.</p>
-        <p class="mt-6 mb-8 text-[1.25rem] leading-[1.35] font-semibold text-heading">Friday 23 October 2026, Student Base, The Strip, High Tech Campus, Eindhoven</p>
-        <div class="flex flex-wrap items-center gap-3">
-          <RegistrationLink />
-          <CalendarDownload />
+        <h2 id="recap-heading">Talks, tools, and things to take apart</h2>
+        <div class="mt-10 grid gap-x-16 gap-y-10 min-[761px]:grid-cols-2">
+          <article>
+            <h3 class="mb-3">Haptics in product design</h3>
+            <p>Thomas Müller and Stefanie Birk from <ExternalLink href={partnerUrl('Hapticlabs')}>Hapticlabs</ExternalLink> shared their experience of haptics in product design. In the workshop, we applied their toolkit and felt the effects for ourselves.</p>
+          </article>
+          <article>
+            <h3 class="mb-3">Prototyping with a prompt</h3>
+            <p>Samuel Beek and the team from <ExternalLink href={partnerUrl('Schematik')}>Schematik</ExternalLink> demonstrated a tool that gets you started with a hardware project using a single prompt, lowering the barrier to hardware prototyping.</p>
+          </article>
+          <article>
+            <h3 class="mb-3">Repairable by design</h3>
+            <p>Klemen Lilija and Hane Park from <ExternalLink href={partnerUrl('Teufel')}>Lautsprecher Teufel</ExternalLink> introduced MYND, a repairable, open-source speaker. We worked on it ourselves and saw how thoughtful design can make repair easier and more intuitive.</p>
+          </article>
+          <article>
+            <h3 class="mb-3">Sharing research hardware</h3>
+            <p>Jurrian Doornbos from the Open Source Hardware Infrastructure of the Netherlands, <ExternalLink href={partnerUrl('OSHned')}>OSHNED</ExternalLink>, spoke about the platform he's building for sharing hardware. His practical examples included a microscope adapted for malaria detection.</p>
+          </article>
         </div>
-        <p class="mt-4 text-[.9rem] text-muted">Hosted by Hardware Interaction Design. No spam. Also listed on the <ExternalLink href={programmeUrl}>Dutch Design Week programme</ExternalLink>.</p>
-        <h3 class="mt-14 mb-2">Bring someone</h3>
-        <p class="max-w-[38rem] text-muted">If you know someone who would add something to the day, pass this page on. Ask them to register through the sign-up form first, so we know how many people to expect.</p>
       </div>
     </section>
-    <section id="about" class="section border-t border-line" tabindex="-1" aria-labelledby="about-heading">
-      <div class="wrap grid gap-x-16 gap-y-6 min-[900px]:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-        <h2 id="about-heading">Hosted by the Hardware Interaction Design community</h2>
-        <p class="max-w-[38rem] text-[1.1rem] min-[900px]:pt-2">This is the first in-person event from <a class="text-link" href="/">Hardware Interaction Design</a>, a community for the interaction designers, UX researchers, industrial designers, and engineers who design, research, prototype, and ship physical products. Designing a button, a dial, or a wearable comes with problems that software communities rarely talk about.</p>
+
+    <section id="photos" class="section" tabindex="-1" aria-labelledby="photos-heading">
+      <div class="wrap">
+        <div id="people" class="mb-10 max-w-[40rem] scroll-mt-24" tabindex="-1">
+          <h2 id="photos-heading">Around the tables</h2>
+          <p class="text-[1.15rem]">Many participants brought projects they were proud of. Seeing what others were working on, and why, made the conference a community of people learning from each other.</p>
+        </div>
+        <div class="grid gap-x-8 gap-y-10 min-[601px]:grid-cols-2">
+          {#each gallery as photo (photo.src)}
+            <EventPhoto {photo} class={photo === eventPhotos.community ? 'min-[601px]:col-span-2' : ''} />
+          {/each}
+        </div>
+      </div>
+    </section>
+
+    <Programme />
+
+    <section id="about" class="section" tabindex="-1" aria-labelledby="about-heading">
+      <div class="wrap grid gap-x-16 gap-y-6 min-[900px]:grid-cols-2">
+        <h2 id="about-heading">With thanks</h2>
+        <div id="venue" class="max-w-[36rem] scroll-mt-24 text-[1.1rem] min-[900px]:pt-2" tabindex="-1">
+          <p>Thank you to Student Base and Bert-Jan Woertman at the High Tech Campus for providing the space, to everyone who led a session, and to everyone who brought a project, a question, or a story.</p>
+          <p>This was the first in-person event from <a class="text-link" href={resolve('/')}>Hardware Interaction Design</a>. The community continues beyond the conference.</p>
+          <ExternalLink button href={programmeUrl}>Original Dutch Design Week listing</ExternalLink>
+        </div>
+      </div>
+    </section>
+
+    <section id="register" class="section bg-panel" tabindex="-1" aria-labelledby="continue-heading">
+      <div class="wrap grid gap-x-16 gap-y-6 min-[900px]:grid-cols-2">
+        <h2 id="continue-heading">Beyond Eindhoven</h2>
+        <div class="max-w-[36rem]">
+          <p class="text-muted">This event has ended. Registration is closed.</p>
+          <p class="text-[1.15rem]">We kicked off the Hardware Interaction Design LinkedIn group at the conference. Join us to share tools, methods, and inspiration, and keep the conversation going.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <LinkButton href={communityUrl} target="_blank">Join the LinkedIn group<span class="sr-only">, opens in a new tab</span></LinkButton>
+            <LinkButton href={resolve('/#stockholm')} variant="secondary">Next: Stockholm, early 2027</LinkButton>
+          </div>
+        </div>
       </div>
     </section>
   </main>
   <footer class="border-t border-line py-8 text-[.9rem] text-muted">
     <div class="wrap flex w-full flex-wrap items-center justify-between gap-3">
       <span class="flex items-center gap-3 font-medium text-heading"><img class="mark h-5" src="/logo-mark.png" width="800" height="435" alt="" /> Hardware Interaction Design</span>
-      <span>Conference on 23 October 2026 at Student Base, High Tech Campus, Eindhoven</span>
+      <a class="text-link" href={resolve('/#past-events')}>Back to past events</a>
     </div>
   </footer>
 </div>

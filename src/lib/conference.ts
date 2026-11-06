@@ -55,25 +55,40 @@ export const topics = [
 ];
 
 export const eventPath = '/events/eindhoven-2026/';
+export const communityUrl = 'https://www.linkedin.com/groups/42710001/';
 
-/** One menu for the whole site. Each page lists its sections; the menu is the same everywhere. */
-export const siteMenu = [
-  {
-    label: 'Hardware Interaction Design', path: '/', overview: 'Home',
-    sections: [
-      { id: 'events', label: 'Events' },
-      { id: 'topics', label: 'Topics' },
-      { id: 'demo', label: 'Live input demo' }
-    ]
+export const eventPhotos = {
+  talk: {
+    src: '/events/eindhoven-2026/conference-talk-student-base.jpg',
+    alt: 'Attendees listening to a presentation at Student Base, with hardware projects on the tables.',
+    caption: 'The first Hardware Interaction Design conference at Student Base during Dutch Design Week.'
   },
-  {
-    label: 'Conference, 23 October 2026', path: eventPath, overview: 'Conference overview',
-    sections: [
-      { id: 'program', label: 'Programme' },
-      { id: 'people', label: "Who you'll meet" },
-      { id: 'venue', label: 'Venue & getting there' },
-      { id: 'register', label: 'Register' },
-      { id: 'about', label: 'Hosted by' }
-    ]
+  repair: {
+    src: '/events/eindhoven-2026/teufel-mynd-speaker-repair.jpg',
+    alt: 'Two participants working on an opened Teufel MYND speaker, with repair tools on the table.',
+    caption: 'Getting hands-on with the repairable Teufel MYND speaker.'
+  },
+  workshop: {
+    src: '/events/eindhoven-2026/teufel-mynd-workshop.jpg',
+    alt: 'A group gathered around a table as a participant uses a screwdriver on an opened speaker.',
+    caption: 'Taking the speaker apart together.'
+  },
+  community: {
+    src: '/events/eindhoven-2026/community-projects-and-conversations.jpg',
+    alt: 'Participants sharing projects and talking in small groups around the tables at Student Base.',
+    caption: 'Projects, questions, and conversations around the tables.'
   }
-];
+} as const;
+
+/** Global destinations stay the same on every page. Article shortcuts live in the article. */
+export const siteNavigation = [
+  { label: 'Home', href: '/' },
+  { label: 'Events', href: '/#events' },
+  { label: 'Topics', href: '/#topics' },
+  { label: 'Community', href: '/#community' }
+] as const;
+
+export const archiveNavigation = [
+  { label: 'All past events', href: '/#past-events' },
+  { label: 'Eindhoven 2026 recap', href: eventPath }
+] as const;
